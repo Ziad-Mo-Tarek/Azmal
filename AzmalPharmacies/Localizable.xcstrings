@@ -1,0 +1,66 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "onboarding.first.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access trusted medicines and manage your prescriptions directly from your phone."
+          }
+        }
+      }
+    },
+    "onboarding.first.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Smart Pharmacy at Your Fingertips"
+          }
+        }
+      }
+    },
+    "onboarding.getStarted" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
+          }
+        }
+      }
+    },
+    "onboarding.next" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        }
+      }
+    },
+    "onboarding.second.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No need to visit the store ... browse products, pay securely, and track your order instantly"
+          }
+        }
+      }
+    },
+    "onboarding.second.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Order Safely in Just a Few Taps"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
