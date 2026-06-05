@@ -6,8 +6,8 @@ struct EditProfileView: View {
 
     var body: some View {
         VStack(spacing: AppSpacing.large) {
-            AppTextField(title: "Name", text: $name)
-            AppTextField(title: "Email", text: $email, keyboardType: .emailAddress)
+            AppTextField(title: "Name", text: $name, leadingIcon: .system("person"))
+            AppTextField(title: "Email", text: $email, leadingIcon: .system("envelope"), keyboardType: .emailAddress)
             PrimaryButton(title: "Save", systemImage: "checkmark") {}
         }
         .appScreenPadding()

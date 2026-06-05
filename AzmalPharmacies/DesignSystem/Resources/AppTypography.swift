@@ -1,5 +1,25 @@
 import SwiftUI
 
+// MARK: - Typography Reference
+// Top → Bottom by size:
+//
+// Heading            → Bold      → 28pt
+// Heading-medium     → Medium    → 24pt
+// Button label       → Semibold  → 22pt
+// Heading-small      → Semibold  → 20pt
+// Body-large         → Regular   → 16pt
+// Body-medium        → Medium    → 16pt
+// Body-semibol-small → Semibold  → 13pt
+// Body-medium-small  → Medium    → 13pt
+// Body-small         → Regular   → 13pt
+// Body-sembold-Tiny  → Semibold  → 11pt
+// Body-Tiny          → Regular   → 11pt
+// Caption-medium     → Medium    → 10pt
+// Caption-small      → Regular   → 7pt
+//
+// When design specs are unclear, use this list to quickly match the
+// typography token by visual size and weight instead of inspecting the enum.
+
 enum AppTypography {
     enum Style {
         case heading

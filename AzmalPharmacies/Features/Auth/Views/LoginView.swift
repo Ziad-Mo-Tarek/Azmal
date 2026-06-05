@@ -1,16 +1,40 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var phone = ""
+    @State private var email = ""
     @State private var password = ""
 
     var body: some View {
-        VStack(spacing: AppSpacing.large) {
-            AppTextField(title: "Phone", text: $phone, keyboardType: .phonePad)
-            AppTextField(title: "Password", text: $password, isSecure: true)
-            PrimaryButton(title: "Login", systemImage: "arrow.right") {}
+        VStack(spacing: 0) {
+            AppTextField(
+                title: "Enter Your Email",
+                text: $email,
+                leadingIcon: .system("envelope")
+            )
+            .padding(.bottom, 20)
+
+            AppTextField(
+                title: "Enter Your Password",
+                text: $password,
+                leadingIcon: .system("lock"),
+                isSecure: true
+            )
+            .padding(.bottom, 8)
+            
+            Text(LocalizedStringKey("Forgot password?"))
+                .appTextStyle(.bodySmall, color: .primaryApp)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            
+            PrimaryButton(
+                title: "Log In"
+            ) {
+            }
+            .padding(.top, 28)
         }
-        .appScreenPadding()
-        .navigationTitle("Login")
     }
+}
+
+
+#Preview {
+    LoginView()
 }

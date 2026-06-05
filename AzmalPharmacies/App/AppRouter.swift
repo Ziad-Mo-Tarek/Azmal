@@ -11,4 +11,9 @@ final class AppRouter {
     func popToRoot() {
         path = NavigationPath()
     }
+    
+    func pop() {
+        guard !path.isEmpty else { return }
+        path.removeLast()
+    }
 }
