@@ -5,7 +5,7 @@ struct ProductSearchView: View {
 
     var body: some View {
         VStack(spacing: AppSpacing.large) {
-            SearchField(text: $searchText)
+            CustomSearchBar(text: $searchText)
             ProductListView(title: "Search", products: Product.mockProducts)
         }
         .navigationTitle("Search")

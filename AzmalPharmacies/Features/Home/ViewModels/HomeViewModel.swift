@@ -19,6 +19,14 @@ final class HomeViewModel {
     ) {
         self.productRepository = productRepository
     }
+    
+    let banners: [HomeBannerSlide] = [
+        HomeBannerSlide(id: "banner-nature", caption: "Nature", imageName: AppConstants.randomeImage),
+        HomeBannerSlide(id: "banner-coastal", caption: "Coastal", imageName: AppConstants.randomeImage),
+        HomeBannerSlide(id: "banner-city", caption: "City View", imageName: AppConstants.randomeImage),
+        HomeBannerSlide(id: "banner-skyline", caption: "Skyline", imageName: AppConstants.randomeImage)
+    ]
+    var selectedBannerIndex = 0
 
     @MainActor
     func loadHomeProducts() async {
@@ -38,4 +46,12 @@ final class HomeViewModel {
 
         isLoadingProducts = false
     }
+}
+
+struct HomeBannerSlide: Identifiable, Hashable {
+    let id: String
+    /// Large watermark caption shown on the slide.
+    let caption: String
+    /// Asset name for the slide background image.
+    let imageName: String
 }

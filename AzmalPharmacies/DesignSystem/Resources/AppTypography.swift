@@ -178,18 +178,23 @@ enum AppTypography {
 struct AppTextModifier: ViewModifier {
     let style: AppTypography.Style
     let color: Color
+    let weight: Font.Weight?
 
     func body(content: Content) -> some View {
         content
             .font(style.font)
-            .fontWeight(style.weight)
+            .fontWeight(weight ?? style.weight)
 //            .lineSpacing(style.lineSpacing)
             .foregroundStyle(color)
     }
 }
 
 extension View {
-    func appTextStyle(_ style: AppTypography.Style, color: Color = AppColors.textPrimary) -> some View {
-        modifier(AppTextModifier(style: style, color: color))
+    func appTextStyle(
+        _ style: AppTypography.Style,
+        color: Color = AppColors.textPrimary,
+        weight: Font.Weight? = nil
+    ) -> some View {
+        modifier(AppTextModifier(style: style, color: color, weight: weight))
     }
 }

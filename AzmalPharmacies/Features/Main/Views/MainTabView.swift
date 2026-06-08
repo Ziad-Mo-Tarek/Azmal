@@ -14,7 +14,7 @@ struct MainTabView: View {
 
         TabView(selection: $appState.selectedTab) {
             NavigationStack(path: $homeRouter.path) {
-                HomeView()
+                HomeView(viewModel: HomeViewModel(productRepository: DependencyContainer.live.productRepository))
                     .withAppRouter()
             }
             .environment(homeRouter)
