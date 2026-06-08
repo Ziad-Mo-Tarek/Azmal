@@ -42,23 +42,6 @@ struct HomeBanner: View {
     private func slideView(_ slide: HomeBannerSlide) -> some View {
         ZStack(alignment: .topLeading) {
             ImageLoader(urlString: slide.imageName)
-            
-            LinearGradient(
-                colors: [
-                    Color.appWhite
-                    //                        .tropicalBlueLight.opacity(0.55),
-                    //                        .clear,
-                    //                        .firefly.opacity(0.28)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            
-//            Text(slide.caption)
-            //                    .appFont(size: 42, weight: .black, color: .firefly.opacity(0.25))
-            //                    .padding(.leading, min(132, max(24, proxy.size.width * 0.36)))
-            //                    .padding(.top, -12)
-//                .accessibilityHidden(true)
         }
         
         .frame(height: 156)

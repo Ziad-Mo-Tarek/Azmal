@@ -14,63 +14,69 @@ struct HomeView: View {
         @Bindable var viewModel = viewModel
         
         ScrollView {
-            VStack(alignment: .leading, spacing: AppSpacing.large) {
+            VStack(alignment: .leading, spacing: 0) {
                 header
+                    .appScreenPadding()
+                    .padding(.bottom, 21)
+                
                 searchText
+                    .appScreenPadding()
+                    .padding(.bottom, 20)
                 
                 HomeBanner(slides: viewModel.banners, index: $viewModel.selectedBannerIndex)
-
-                SectionHeader(title: "Featured Products", actionTitle: "View all") {
-                    router.push(.productDetails(id: 1))
-                }
-
-                if let errorMessage = viewModel.productsErrorMessage {
-                    VStack(alignment: .center, spacing: AppSpacing.medium) {
-                        Text("Failed to load products")
-                            .font(AppTypography.headline)
-                            .foregroundStyle(AppColors.textPrimary)
-                        Text(errorMessage)
-                            .font(AppTypography.body)
-                            .foregroundStyle(AppColors.textSecondary)
-                            .multilineTextAlignment(.center)
-                        SecondaryButton(title: "Try Again") {
-                            Task {
-                                await viewModel.loadHomeProducts()
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(AppColors.primary.opacity(0.05))
-                    .cornerRadius(AppRadius.medium)
-                } else if viewModel.isLoadingProducts && viewModel.featuredProducts.isEmpty {
-                    HStack {
-                        Spacer()
-                        LoadingView()
-                            .frame(height: 150)
-                        Spacer()
-                    }
-                } else {
-                    LazyVGrid(columns: columns, spacing: AppSpacing.medium) {
-                        ForEach(viewModel.featuredProducts) { product in
-                            ProductCard(product: product) {
-                                router.push(.productDetails(id: product.id))
-                            }
-                        }
+                    .appScreenPadding()
+                    .padding(.bottom, 24)
+                // Shop by Category
+                sectionContainer(title: "Shop by Category") {
+                    HStack(spacing: AppSpacing.medium) {
+                        CategoryCell(title: "Medications", imageURL: nil, imageSize: 80)
+                        CategoryCell(title: "Skincare", imageURL: nil, imageSize: 80)
+                        CategoryCell(title: "Haircare", imageURL: nil, imageSize: 80)
+                        CategoryCell(title: "mom & baby", imageURL: nil, imageSize: 80)
                     }
                 }
-
-                SectionHeader(title: "Nearby Pharmacies")
-                ForEach(viewModel.pharmacies) { pharmacy in
-                    PharmacyCard(pharmacy: pharmacy)
-                        .onTapGesture {
-                            router.push(.pharmacyDetails(id: pharmacy.id))
-                        }
+                
+                // New Arrival
+                sectionContainer(title: "New Arrival") {
+                    horizontalProductList(badge: .none, currentPrice: "EGP 1000", originalPrice: nil)
                 }
+
+                // Limited Offers
+                sectionContainer(title: "Limited Offers") {
+                    horizontalProductList(badge: .discount("20% Discount"), currentPrice: "EGP 800", originalPrice: "EGP 1000")
+                }
+
+                // Trending
+                sectionContainer(title: "Trending") {
+                    horizontalProductList(badge: .bestSeller, currentPrice: "EGP 1000", originalPrice: nil)
+                }
+                
+                // Shop by Brand
+                sectionContainer(title: "Shop by Brand") {
+                    LazyHGrid(
+                        rows: [
+                            GridItem(.fixed(60), spacing: AppSpacing.medium),
+                            GridItem(.fixed(60), spacing: AppSpacing.medium)
+                        ],
+                        spacing: AppSpacing.medium
+                    ) {
+                        ForEach(0..<8) { _ in
+                            RoundedRectangle(cornerRadius: AppRadius.medium)
+                                .fill(AppColors.surface)
+                                .frame(width: 100, height: 60)
+                                .shadow(color: AppColors.textSecondary.opacity(0.1), radius: 4, x: 0, y: 2)
+                                .overlay(
+                                    Image(systemName: "tag.fill")
+                                        .foregroundColor(AppColors.textSecondary)
+                                )
+                        }
+                    }
+                }
+                
             }
-            .appScreenPadding()
-            .padding(.vertical, AppSpacing.large)
+            .padding(.bottom, AppSpacing.large)
         }
+        .scrollIndicators(.hidden)
         .background(AppColors.background)
         .navigationTitle("Azmal Pharmacies")
         .refreshable {
@@ -126,6 +132,40 @@ struct HomeView: View {
         CustomSearchBar(text: $viewModel.searchText, placeholder: "Search your Medicine & Healthcare Products")
     }
     
+    @ViewBuilder
+    private func sectionContainer<Content: View>(
+        title: String,
+        action: @escaping () -> Void = {},
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(spacing: AppSpacing.medium) {
+            SectionHeader(title: title, actionTitle: "View All >", action: action)
+                .appScreenPadding()
+            ScrollView(.horizontal, showsIndicators: false) {
+                content()
+                    .appScreenPadding()
+                    .padding(.bottom, 32)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func horizontalProductList(badge: ProductBadge?, currentPrice: String, originalPrice: String?) -> some View {
+        HStack(spacing: AppSpacing.medium) {
+            ForEach(0..<4) { _ in
+                ProductCell(
+                    title: "Cerave daily moisturizing lotion for normal to dry ski...",
+                    imageURL: nil,
+                    currentPrice: currentPrice,
+                    originalPrice: originalPrice,
+                    badge: badge,
+                    isFavorite: false,
+                    onFavoriteToggle: {},
+                    onAddToCart: {}
+                )
+            }
+        }
+    }
 }
 
 
