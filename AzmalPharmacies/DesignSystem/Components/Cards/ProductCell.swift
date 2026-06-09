@@ -1,25 +1,5 @@
 import SwiftUI
 
-struct CustomCorner: Shape {
-    var radius: CGFloat
-    var corners: UIRectCorner
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}
-
-extension View {
-    func customCornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(CustomCorner(radius: radius, corners: corners))
-    }
-}
-
 enum ProductBadge {
     case bestSeller
     case discount(String)
@@ -27,13 +7,15 @@ enum ProductBadge {
 
 struct ProductCell: View {
     let title: String
-    let imageURL: URL?
+    let imageURL: String?
     let currentPrice: String
     let originalPrice: String?
     let badge: ProductBadge?
     let isFavorite: Bool
+    let cartQuantity: Int
     let onFavoriteToggle: () -> Void
-    let onAddToCart: () -> Void
+    let onAdd: () -> Void
+    let onRemove: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -43,7 +25,7 @@ struct ProductCell: View {
                 ZStack(alignment: .bottomLeading) {
                     
                     ImageLoader(
-                        urlString: imageURL?.absoluteString ?? AppConstants.randomeImage,
+                        urlString: imageURL ?? AppConstants.randomeImage,
                         contentMode: .fill
                     )
                     
@@ -105,13 +87,38 @@ struct ProductCell: View {
                 // Add To Cart Button
                 HStack {
                     Spacer()
-                    Button(action: onAddToCart) {
-                        Text(LocalizedStringKey("Add To Cart"))
-                            .appTextStyle(.bodySemiboldTiny, color: .appWhite)
-                            .padding(.horizontal, 11)
-                            .padding(.vertical, 5)
-                            .background(AppColors.primary)
-                            .clipShape(Capsule())
+                    if cartQuantity > 0 {
+                        HStack(spacing: 13) {
+                            Button(action: onRemove) {
+                                Image(systemName: "minus")
+                                    .foregroundColor(AppColors.primary)
+                                    .frame(width: 28, height: 28)
+                            }
+                            
+                            Text(String(format: "%02d", cartQuantity))
+                                .appTextStyle(.bodySemiboldTiny, color: .primaryApp)
+                            
+                            Button(action: onAdd) {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.white)
+                                    .frame(width: 28, height: 28)
+                                    .background(.primaryApp)
+                                    .clipShape(Circle())
+                            }
+                        }
+                        .background(Color.white)
+                        .clipShape(Capsule())
+                        .shadow(color: .appDark.opacity(0.25), radius: 4, x: 0, y: 6)
+                        
+                    } else {
+                        Button(action: onAdd) {
+                            Text(LocalizedStringKey("Add To Cart"))
+                                .appTextStyle(.bodySemiboldTiny, color: .appWhite)
+                                .padding(.horizontal, 11)
+                                .padding(.vertical, 5)
+                                .background(AppColors.primary)
+                                .clipShape(Capsule())
+                        }
                     }
                 }
             }
@@ -140,8 +147,10 @@ struct ProductCell: View {
                     originalPrice: nil,
                     badge: .none,
                     isFavorite: false,
+                    cartQuantity: 0,
                     onFavoriteToggle: {},
-                    onAddToCart: {}
+                    onAdd: {},
+                    onRemove: {}
                 )
                 
                 // Discount
@@ -152,8 +161,10 @@ struct ProductCell: View {
                     originalPrice: "EGP 1000",
                     badge: .discount("20% Discount"),
                     isFavorite: false,
+                    cartQuantity: 2,
                     onFavoriteToggle: {},
-                    onAddToCart: {}
+                    onAdd: {},
+                    onRemove: {}
                 )
                 
                 // Best Seller
@@ -164,8 +175,10 @@ struct ProductCell: View {
                     originalPrice: nil,
                     badge: .bestSeller,
                     isFavorite: true,
+                    cartQuantity: 0,
                     onFavoriteToggle: {},
-                    onAddToCart: {}
+                    onAdd: {},
+                    onRemove: {}
                 )
             }
             .padding()

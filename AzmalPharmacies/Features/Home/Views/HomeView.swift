@@ -160,8 +160,10 @@ struct HomeView: View {
                     originalPrice: originalPrice,
                     badge: badge,
                     isFavorite: false,
+                    cartQuantity: 0,
                     onFavoriteToggle: {},
-                    onAddToCart: {}
+                    onAdd: {},
+                    onRemove: {}
                 )
             }
         }
