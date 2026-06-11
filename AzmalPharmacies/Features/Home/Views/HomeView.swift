@@ -4,6 +4,7 @@ struct HomeView: View {
     @State var viewModel: HomeViewModel
     @Environment(AppRouter.self) private var router
     @Environment(DependencyContainer.self) private var dependencies
+    @State private var showStickyHeader: Bool = false
     
     private let columns = [
         GridItem(.flexible(), spacing: AppSpacing.medium),
@@ -13,78 +14,114 @@ struct HomeView: View {
     var body: some View {
         @Bindable var viewModel = viewModel
         
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                header
-                    .appScreenPadding()
-                    .padding(.bottom, 21)
-                
-                searchText
-                    .appScreenPadding()
-                    .padding(.bottom, 20)
-                
-                HomeBanner(slides: viewModel.banners, index: $viewModel.selectedBannerIndex)
-                    .appScreenPadding()
-                    .padding(.bottom, 24)
-                // Shop by Category
-                sectionContainer(title: "Shop by Category") {
-                    HStack(spacing: AppSpacing.medium) {
-                        CategoryCell(title: "Medications", imageURL: nil, imageSize: 80)
-                        CategoryCell(title: "Skincare", imageURL: nil, imageSize: 80)
-                        CategoryCell(title: "Haircare", imageURL: nil, imageSize: 80)
-                        CategoryCell(title: "mom & baby", imageURL: nil, imageSize: 80)
+        ZStack(alignment: .top) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    GeometryReader { proxy in
+                        Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: proxy.frame(in: .named("scroll")).minY)
                     }
-                }
-                
-                // New Arrival
-                sectionContainer(title: "New Arrival") {
-                    horizontalProductList(badge: .none, currentPrice: "EGP 1000", originalPrice: nil)
-                }
-
-                // Limited Offers
-                sectionContainer(title: "Limited Offers") {
-                    horizontalProductList(badge: .discount("20% Discount"), currentPrice: "EGP 800", originalPrice: "EGP 1000")
-                }
-
-                // Trending
-                sectionContainer(title: "Trending") {
-                    horizontalProductList(badge: .bestSeller, currentPrice: "EGP 1000", originalPrice: nil)
-                }
-                
-                // Shop by Brand
-                sectionContainer(title: "Shop by Brand") {
-                    LazyHGrid(
-                        rows: [
-                            GridItem(.fixed(60), spacing: AppSpacing.medium),
-                            GridItem(.fixed(60), spacing: AppSpacing.medium)
-                        ],
-                        spacing: AppSpacing.medium
-                    ) {
-                        ForEach(0..<8) { _ in
-                            RoundedRectangle(cornerRadius: AppRadius.medium)
-                                .fill(AppColors.surface)
-                                .frame(width: 100, height: 60)
-                                .shadow(color: AppColors.textSecondary.opacity(0.1), radius: 4, x: 0, y: 2)
-                                .overlay(
-                                    Image(systemName: "tag.fill")
-                                        .foregroundColor(AppColors.textSecondary)
-                                )
+                    .frame(height: 0)
+                    
+                    header
+                        .appScreenPadding()
+                        .padding(.bottom, 21)
+                    
+                    searchText
+                        .appScreenPadding()
+                        .padding(.bottom, 20)
+                    
+                    HomeBanner(slides: viewModel.banners, index: $viewModel.selectedBannerIndex)
+                        .appScreenPadding()
+                        .padding(.bottom, 24)
+                    // Shop by Category
+                    sectionContainer(title: "Shop by Category") {
+                        HStack(spacing: AppSpacing.medium) {
+                            CategoryCell(title: "Medications", imageURL: nil, imageSize: 80)
+                            CategoryCell(title: "Skincare", imageURL: nil, imageSize: 80)
+                            CategoryCell(title: "Haircare", imageURL: nil, imageSize: 80)
+                            CategoryCell(title: "mom & baby", imageURL: nil, imageSize: 80)
                         }
                     }
+                    
+                    // New Arrival
+                    sectionContainer(title: "New Arrival") {
+                        horizontalProductList(badge: .none, currentPrice: "EGP 1000", originalPrice: nil)
+                    }
+
+                    // Limited Offers
+                    sectionContainer(title: "Limited Offers") {
+                        horizontalProductList(badge: .discount("20% Discount"), currentPrice: "EGP 800", originalPrice: "EGP 1000")
+                    }
+
+                    // Trending
+                    sectionContainer(title: "Trending") {
+                        horizontalProductList(badge: .bestSeller, currentPrice: "EGP 1000", originalPrice: nil)
+                    }
+                    
+                    // Shop by Brand
+                    sectionContainer(title: "Shop by Brand") {
+                        LazyHGrid(
+                            rows: [
+                                GridItem(.fixed(60), spacing: AppSpacing.medium),
+                                GridItem(.fixed(60), spacing: AppSpacing.medium)
+                            ],
+                            spacing: AppSpacing.medium
+                        ) {
+                            ForEach(0..<8) { _ in
+                                RoundedRectangle(cornerRadius: AppRadius.medium)
+                                    .fill(AppColors.surface)
+                                    .frame(width: 100, height: 60)
+                                    .shadow(color: AppColors.textSecondary.opacity(0.1), radius: 4, x: 0, y: 2)
+                                    .overlay(
+                                        Image(systemName: "tag.fill")
+                                            .foregroundColor(AppColors.textSecondary)
+                                    )
+                            }
+                        }
+                    }
+                    
                 }
-                
+                .padding(.bottom, AppSpacing.large)
             }
-            .padding(.bottom, AppSpacing.large)
+            .coordinateSpace(name: "scroll")
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                let shouldShow = value < -130
+                if showStickyHeader != shouldShow {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        showStickyHeader = shouldShow
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
+            .background(AppColors.background)
+            .toolbar(.hidden, for: .navigationBar)
+            .refreshable {
+                await viewModel.loadHomeProducts()
+            }
+            .task {
+                await viewModel.loadHomeProducts()
+            }
+            
+            if showStickyHeader {
+                AppNavigationBar(
+                    title: nil,
+                    showBackButton: false,
+                    searchBinding: .constant(""),
+                    onSearchSubmit: { router.push(.productSearch) }
+                )
+                .overlay {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            router.push(.productSearch)
+                        }
+                }
+                .background(AppColors.primary)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .zIndex(1)
+            }
         }
-        .scrollIndicators(.hidden)
-        .background(AppColors.background)
-        .navigationTitle("Azmal Pharmacies")
-        .refreshable {
-            await viewModel.loadHomeProducts()
-        }
-        .task {
-            await viewModel.loadHomeProducts()
-        }
+        
     }
     
     private var greeting: String {
@@ -129,7 +166,17 @@ struct HomeView: View {
     }
     
     private var searchText: some View {
-        CustomSearchBar(text: $viewModel.searchText, placeholder: "Search your Medicine & Healthcare Products")
+        CustomSearchBar(
+            text: .constant(""),
+            placeholder: "Search your Medicine & Healthcare Products"
+        )
+        .overlay {
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    router.push(.productSearch)
+                }
+        }
     }
     
     @ViewBuilder
@@ -163,10 +210,18 @@ struct HomeView: View {
                     cartQuantity: 0,
                     onFavoriteToggle: {},
                     onAdd: {},
-                    onRemove: {}
+                    onRemove: {},
+                    fixedWidth: 164
                 )
             }
         }
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value += nextValue()
     }
 }
 

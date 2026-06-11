@@ -1,11 +1,13 @@
 import SwiftUI
 
 enum AppRoute: Hashable {
+    case splash
     case onboarding
     case login
     case register
     case otpVerification(phone: String)
     case productDetails(id: Int)
+    case productSearch
     case pharmacyDetails(id: Int)
     case prescriptionUpload
     case checkout
@@ -21,6 +23,8 @@ extension AppRoute {
     @ViewBuilder
     var destination: some View {
         switch self {
+        case .splash:
+            SplashView()
         case .onboarding:
             OnboardingView()
         case .login:
@@ -31,6 +35,8 @@ extension AppRoute {
             OTPVerificationView(phone: phone)
         case .productDetails(let id):
             ProductDetailsView(productID: id)
+        case .productSearch:
+            ProductsView()
         case .pharmacyDetails(let id):
             PharmacyDetailsView(pharmacyID: id)
         case .prescriptionUpload:

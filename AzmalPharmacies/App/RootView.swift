@@ -5,9 +5,15 @@ struct RootView: View {
     @State private var dependencies = DependencyContainer.live
 
     var body: some View {
-        MainTabView()
-            .environment(appState)
-            .environment(dependencies)
+        Group {
+            if appState.isSplashFinished {
+                MainTabView()
+            } else {
+                SplashView()
+            }
+        }
+        .environment(appState)
+        .environment(dependencies)
     }
 }
 

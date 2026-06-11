@@ -6,6 +6,7 @@ struct AppNavigationBar<TrailingContent: View>: View {
     let backAction: (() -> Void)?
     var searchBinding: Binding<String>?
     var searchPlaceholder: String
+    var onSearchSubmit: (() -> Void)?
     @ViewBuilder let trailingContent: TrailingContent
     
     @Environment(\.dismiss) private var dismiss
@@ -16,6 +17,7 @@ struct AppNavigationBar<TrailingContent: View>: View {
         backAction: (() -> Void)? = nil,
         searchBinding: Binding<String>? = nil,
         searchPlaceholder: String = "Search your Medicine & Healthcare Products",
+        onSearchSubmit: (() -> Void)? = nil,
         @ViewBuilder trailingContent: () -> TrailingContent = { EmptyView() }
     ) {
         self.title = title
@@ -23,6 +25,7 @@ struct AppNavigationBar<TrailingContent: View>: View {
         self.backAction = backAction
         self.searchBinding = searchBinding
         self.searchPlaceholder = searchPlaceholder
+        self.onSearchSubmit = onSearchSubmit
         self.trailingContent = trailingContent()
     }
     
@@ -52,8 +55,7 @@ struct AppNavigationBar<TrailingContent: View>: View {
                     trailingContent
                 } else if let searchBinding = searchBinding {
                     // Search bar in top row
-                    //                    searchBarView(binding: searchBinding)
-                    CustomSearchBar(text: searchBinding, placeholder: LocalizedStringKey(searchPlaceholder))
+                    CustomSearchBar(text: searchBinding, placeholder: LocalizedStringKey(searchPlaceholder), onSubmit: onSearchSubmit)
                 } else {
                     Spacer()
                 }
@@ -61,7 +63,7 @@ struct AppNavigationBar<TrailingContent: View>: View {
             
             // Second Row for Search Bar (if title is present)
             if title != nil, let searchBinding = searchBinding {
-                CustomSearchBar(text: searchBinding, placeholder: LocalizedStringKey(searchPlaceholder))
+                CustomSearchBar(text: searchBinding, placeholder: LocalizedStringKey(searchPlaceholder), onSubmit: onSearchSubmit)
             }
         }
         .padding(.horizontal, AppSpacing.medium)

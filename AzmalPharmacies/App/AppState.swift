@@ -6,6 +6,7 @@ final class AppState {
     var selectedTab: AppTab = .home
     var isAuthenticated = false
     var cartItemsCount = 0
+    var isSplashFinished = false
 }
 
 enum AppTab: Hashable, CaseIterable {

@@ -12,6 +12,7 @@ struct CustomSearchBar: View {
     @Binding var text: String
     var placeholder: LocalizedStringKey = "Search..."
     var borderColor: Color = .primaryApp
+    var onSubmit: (() -> Void)? = nil
     var body: some View {
         HStack(spacing: 12) {
             // Search Icon
@@ -20,6 +21,8 @@ struct CustomSearchBar: View {
                 .foregroundColor(Color(UIColor.systemGray2))
             TextField(placeholder, text: $text)
                 .font(.system(size: 16))
+                .submitLabel(.search)
+                .onSubmit { onSubmit?() }
                 .foregroundColor(.primary)
                 // Optional: Adds a clear button when text is entered
                 .overlay(

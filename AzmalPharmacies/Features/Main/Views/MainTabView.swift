@@ -17,6 +17,7 @@ struct MainTabView: View {
                 HomeView(viewModel: HomeViewModel(productRepository: DependencyContainer.live.productRepository))
                     .withAppRouter()
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(homeRouter)
             .tabItem { Label(AppTab.home.title, systemImage: AppTab.home.systemImage) }
             .tag(AppTab.home)
@@ -25,6 +26,7 @@ struct MainTabView: View {
                 CategoriesView()
                     .withAppRouter()
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(categoriesRouter)
             .tabItem { Label(AppTab.categories.title, systemImage: AppTab.categories.systemImage) }
             .tag(AppTab.categories)
@@ -33,6 +35,7 @@ struct MainTabView: View {
                 CartView()
                     .withAppRouter()
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(cartRouter)
             .tabItem { Label(AppTab.cart.title, systemImage: AppTab.cart.systemImage) }
             .badge(appState.cartItemsCount)
@@ -42,6 +45,7 @@ struct MainTabView: View {
                 OrdersView()
                     .withAppRouter()
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(ordersRouter)
             .tabItem { Label(AppTab.orders.title, systemImage: AppTab.orders.systemImage) }
             .tag(AppTab.orders)
@@ -50,6 +54,7 @@ struct MainTabView: View {
                 ProfileView()
                     .withAppRouter()
             }
+            .toolbar(.hidden, for: .navigationBar)
             .environment(profileRouter)
             .tabItem { Label(AppTab.profile.title, systemImage: AppTab.profile.systemImage) }
             .tag(AppTab.profile)

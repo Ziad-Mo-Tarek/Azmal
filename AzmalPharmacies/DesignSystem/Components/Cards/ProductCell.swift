@@ -16,6 +16,9 @@ struct ProductCell: View {
     let onFavoriteToggle: () -> Void
     let onAdd: () -> Void
     let onRemove: () -> Void
+    /// Pass a fixed width for horizontal scroll contexts (e.g. Home). Leave nil in LazyVGrid
+    /// so the cell fills its column naturally.
+    var fixedWidth: CGFloat? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -68,7 +71,7 @@ struct ProductCell: View {
                 // Title
                 Text(title)
                     .appTextStyle(.bodySmall, color: .primaryApp)
-//                    .lineLimit(2)
+                    .lineLimit(2)
                     .multilineTextAlignment(.leading)
                 // Price
                 HStack(spacing: AppSpacing.xSmall) {
@@ -126,7 +129,8 @@ struct ProductCell: View {
             .padding(.bottom, AppSpacing.small)
             .padding(.top, AppSpacing.medium)
         }
-        .frame(width: 164, height: 208)
+        .frame(width: fixedWidth, height: fixedWidth != nil ? 208 : 220)
+        .frame(maxWidth: fixedWidth == nil ? .infinity : nil)
         .background(AppColors.surface)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .shadow(color: .appDark.opacity(0.25), radius: 4, x: 0, y: 6)
