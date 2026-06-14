@@ -34,7 +34,9 @@ struct HomeView: View {
                         .appScreenPadding()
                         .padding(.bottom, 24)
                     // Shop by Category
-                    sectionContainer(title: "Shop by Category") {
+                    sectionContainer(title: "Shop by Category", action: {
+                        router.push(.categoryDirectory)
+                    }) {
                         HStack(spacing: AppSpacing.medium) {
                             CategoryCell(title: "Medications", imageURL: nil, imageSize: 80)
                             CategoryCell(title: "Skincare", imageURL: nil, imageSize: 80)
@@ -59,7 +61,9 @@ struct HomeView: View {
                     }
                     
                     // Shop by Brand
-                    sectionContainer(title: "Shop by Brand") {
+                    sectionContainer(title: "Shop by Brand", action: {
+                        router.push(.brandDirectory)
+                    }) {
                         LazyHGrid(
                             rows: [
                                 GridItem(.fixed(60), spacing: AppSpacing.medium),
@@ -213,6 +217,9 @@ struct HomeView: View {
                     onRemove: {},
                     fixedWidth: 164
                 )
+                .onTapGesture {
+                    router.push(.productDetails(id: 1))
+                }
             }
         }
     }

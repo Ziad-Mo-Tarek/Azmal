@@ -4,6 +4,8 @@ struct ProductsView: View {
     @State private var viewModel = ProductsViewModel()
     @State private var quantities: [Int: Int] = [:]
     @Environment(AppRouter.self) private var router
+    @State private var showSortSheet = false
+    @State private var showFilterSheet = false
     
     private let columns = [
         GridItem(.flexible(), spacing: AppSpacing.medium),
@@ -19,29 +21,27 @@ struct ProductsView: View {
                 title: nil,
                 showBackButton: true,
                 backAction: {
-                    if viewModel.isShowingResults {
-                        viewModel.isShowingResults = false
-                    } else {
-                        router.popToRoot()
-                    }
+                    router.popToRoot()
                 },
                 searchBinding: $viewModel.searchText,
                 searchPlaceholder: "Search Your Products....",
                 onSearchSubmit: { viewModel.performSearch() }
             ) {
                 if viewModel.isShowingResults {
-                    Button(action: {
-                        // Filter Action Placeholder
-                    }) {
-                        Image(systemName: "line.3.horizontal.decrease.circle.fill")
-                            .font(.system(size: 36))
-                            .foregroundColor(Color.white)
+                    HStack(spacing: 8) {
+                        Button(action: {
+                            showFilterSheet = true
+                        }){
+                            Image(.filterICon)
+                                .padding(11)
+                                .background(.appWhite)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                        }
                     }
-                } else {
-                    EmptyView()
                 }
             }
-            
+            .background(AppColors.primary)
+//            .padding(.top, 100)
             // Content
             if viewModel.isShowingResults {
                 searchResults
@@ -53,6 +53,12 @@ struct ProductsView: View {
         }
         .background(AppColors.background)
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showSortSheet) {
+            ProductsSortView()
+        }
+        .sheet(isPresented: $showFilterSheet) {
+            FilterView()
+        }
     }
     
     // MARK: - Search Results
@@ -68,7 +74,7 @@ struct ProductsView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Sort action placeholder
+                        showSortSheet = true
                     }) {
                         HStack(spacing: 4) {
                             Image(systemName: "arrow.up.arrow.down")
@@ -131,6 +137,17 @@ struct ProductsView: View {
                             }
                         }
                         .appTextStyle(.bodySmall, color: AppColors.primary, weight: .semibold)
+                    }
+                    
+                    if viewModel.isShowingResults {
+                        HStack(spacing: 4){
+                            Image(systemName: "arrow.up.arrow.down")
+                                .resizable()
+                                .foregroundStyle(.primaryApp)
+                                .frame(width: 16, height: 16)
+                            Text(LocalizedStringKey("Sort By"))
+                                .appTextStyle(.bodySemiboldSmall, color: .primaryApp, weight: .semibold)
+                        }
                     }
                 }
                 .padding(.horizontal, AppSpacing.medium)

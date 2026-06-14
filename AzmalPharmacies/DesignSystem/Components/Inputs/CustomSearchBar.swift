@@ -40,7 +40,7 @@ struct CustomSearchBar: View {
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(borderColor, lineWidth: 0.5)
-                .background(Color(UIColor.systemBackground).cornerRadius(30)) // Ensures solid background for dark/light mode
+                .background(Color(UIColor.systemBackground).cornerRadius(16)) // Ensures solid background for dark/light mode
         )
     }
 }

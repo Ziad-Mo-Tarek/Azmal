@@ -23,13 +23,13 @@ struct MainTabView: View {
             .tag(AppTab.home)
 
             NavigationStack(path: $categoriesRouter.path) {
-                CategoriesView()
+                OffersView()
                     .withAppRouter()
             }
             .toolbar(.hidden, for: .navigationBar)
             .environment(categoriesRouter)
-            .tabItem { Label(AppTab.categories.title, systemImage: AppTab.categories.systemImage) }
-            .tag(AppTab.categories)
+            .tabItem { Label(AppTab.offers.title, systemImage: AppTab.offers.systemImage) }
+            .tag(AppTab.offers)
 
             NavigationStack(path: $cartRouter.path) {
                 CartView()
@@ -51,13 +51,13 @@ struct MainTabView: View {
             .tag(AppTab.orders)
 
             NavigationStack(path: $profileRouter.path) {
-                ProfileView()
+                MoreView()
                     .withAppRouter()
             }
             .toolbar(.hidden, for: .navigationBar)
             .environment(profileRouter)
-            .tabItem { Label(AppTab.profile.title, systemImage: AppTab.profile.systemImage) }
-            .tag(AppTab.profile)
+            .tabItem { Label(AppTab.more.title, systemImage: AppTab.more.systemImage) }
+            .tag(AppTab.more)
         }
         .tint(AppColors.primary)
     }

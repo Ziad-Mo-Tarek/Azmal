@@ -52,13 +52,16 @@ struct AppNavigationBar<TrailingContent: View>: View {
                     Text(title)
                         .appTextStyle(.headingSmall, color: .appWhite, weight: .semibold)
                     Spacer()
-                    trailingContent
+                    
                 } else if let searchBinding = searchBinding {
                     // Search bar in top row
                     CustomSearchBar(text: searchBinding, placeholder: LocalizedStringKey(searchPlaceholder), onSubmit: onSearchSubmit)
                 } else {
                     Spacer()
                 }
+                
+                trailingContent
+                
             }
             
             // Second Row for Search Bar (if title is present)
@@ -121,7 +124,22 @@ struct AppNavigationBar<TrailingContent: View>: View {
         AppNavigationBar(
             title: "Prescription",
             showBackButton: true
-        )
+        ) {
+            HStack(spacing: 8) {
+                Button(action: {}) {
+                    Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.white)
+                }
+                Button(action: {}) {
+                    Image(systemName: "arrow.up.arrow.down.circle.fill")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.white)
+                }
+            }
+        }
         
         Spacer()
     }
