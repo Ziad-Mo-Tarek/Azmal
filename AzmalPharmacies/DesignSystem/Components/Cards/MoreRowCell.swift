@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct MoreRowCell: View {
-    let icon: String
+    var icon: String? = nil
+    var iconImage: ImageResource? = nil
     let title: LocalizedStringKey
     var isDestructive: Bool = false
     var action: (() -> Void)? = nil
@@ -20,13 +21,17 @@ struct MoreRowCell: View {
                     Circle()
                         .fill(foregroundColor.opacity(0.08))
                         .frame(width: 40, height: 40)
-                    Image(systemName: icon)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(foregroundColor)
+                    if let iconImage = iconImage {
+                        Image(iconImage)
+                    } else if let icon {
+                        Image(systemName: icon)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(.primaryApp)
+                    }
                 }
 
                 Text(title)
-                    .appTextStyle(.bodySmall, color: isDestructive ? .primaryApp : .appDark)
+                    .appTextStyle(.bodySmall, color: isDestructive ? .red : .appDark)
 
                 Spacer()
 
