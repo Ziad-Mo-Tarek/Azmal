@@ -19,6 +19,7 @@ enum AppRoute: Hashable {
     case help
     case categoryDirectory
     case brandDirectory
+    case favorites
 }
 
 extension AppRoute {
@@ -61,6 +62,8 @@ extension AppRoute {
             CategoryDirectoryView()
         case .brandDirectory:
             BrandDirectoryView()
+        case .favorites:
+            FavoritesView()
         }
     }
 }

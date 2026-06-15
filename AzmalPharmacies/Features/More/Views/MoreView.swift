@@ -24,7 +24,7 @@ struct MoreView: View {
                     // Account Section
                     sectionBlock(header: "more.account") {
                         MoreRowCell(icon: "person.fill",          title: "more.profile", isDestructive: false)      { router.push(.editProfile) }
-                        MoreRowCell(icon: "heart.fill",           title: "more.favorites", isDestructive: false)    { router.push(.addresses) }
+                        MoreRowCell(icon: "heart.fill",           title: "more.favorites", isDestructive: false)    { router.push(.favorites) }
                         MoreRowCell(iconImage: .myOrdersProfileIcon,              title: "more.myOrders")     { router.push(.orderDetails(id: 0)) }
                         MoreRowCell(iconImage: .notificationProfileIcon,            title: "more.notification") { }
                     }
