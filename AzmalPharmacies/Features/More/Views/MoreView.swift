@@ -3,6 +3,7 @@ import SwiftUI
 struct MoreView: View {
     @Environment(DependencyContainer.self) private var dependencies
     @Environment(AppRouter.self) private var router
+    @State private var showLanguageSheet = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,7 +32,7 @@ struct MoreView: View {
                     
                     // App Settings Section
                     sectionBlock(header: "more.appSettings") {
-                        MoreRowCell(iconImage: .languageIcon,    title: "more.language")           { router.push(.settings) }
+                        MoreRowCell(iconImage: .languageIcon,    title: "more.language")           { showLanguageSheet = true }
                         MoreRowCell(iconImage: .helpProfileIcon, title: "more.helpSupport")        { router.push(.help) }
                         MoreRowCell(iconImage: .termsAndconditionsProfileIcon,            title: "more.termsConditions")    { }
                         MoreRowCell(iconImage: .privacyProfileIcon,              title: "more.privacyPolicy")      { }
@@ -48,6 +49,9 @@ struct MoreView: View {
         }
         .background(AppColors.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showLanguageSheet) {
+            LanguageSelectionSheet()
+        }
     }
 
     // MARK: - Sub-views
@@ -98,3 +102,5 @@ struct MoreView: View {
         .environment(DependencyContainer())
         .environment(AppRouter())
 }
+
+

@@ -34,7 +34,27 @@ extension Address {
 
 extension Order {
     static let mockOrders: [Order] = [
-        Order(id: 1, number: "#AZ-1001", status: .preparing, total: 140, createdAt: Date(), items: []),
-        Order(id: 2, number: "#AZ-1000", status: .delivered, total: 260, createdAt: Date(), items: [])
+        Order(
+            id: 1,
+            number: "AZ-1001",
+            status: .preparing,
+            total: 143,
+            createdAt: Calendar.current.date(byAdding: .minute, value: -30, to: Date()) ?? Date(),
+            items: [
+                CartItem(id: 101, product: Product.mockProducts[2], quantity: 1), // Cough Syrup: 48
+                CartItem(id: 102, product: Product.mockProducts[0], quantity: 1)  // Vitamin C: 95
+            ]
+        ),
+        Order(
+            id: 2,
+            number: "AZ-1000",
+            status: .delivered,
+            total: 221,
+            createdAt: Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date(),
+            items: [
+                CartItem(id: 103, product: Product.mockProducts[1], quantity: 2), // Pain Relief: 62.5 * 2 = 125
+                CartItem(id: 104, product: Product.mockProducts[2], quantity: 2)  // Cough Syrup: 48 * 2 = 96
+            ]
+        )
     ]
 }

@@ -10,11 +10,12 @@ struct EmptyStateView: View {
             Image(systemName: systemImage)
                 .font(.system(size: 36))
                 .foregroundStyle(AppColors.primary)
+
             Text(title)
-                .font(AppTypography.title)
+                .appTextStyle(.headingMedium, color: .appDark, weight: .medium)
+                .multilineTextAlignment(.center)
             Text(message)
-                .font(AppTypography.body)
-                .foregroundStyle(AppColors.textSecondary)
+                .appTextStyle(.bodySmall, color: .gray, weight: .regular)
                 .multilineTextAlignment(.center)
         }
         .padding(AppSpacing.xLarge)

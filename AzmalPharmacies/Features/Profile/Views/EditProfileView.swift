@@ -45,7 +45,6 @@ struct EditProfileView: View {
                 .appScreenPadding()
                 .padding(.vertical, AppSpacing.xLarge)
             }
-            .background(AppColors.background.ignoresSafeArea())
 
             // ── Pinned Save Button ────────────────────────────────────────────
             VStack(spacing: 0) {
@@ -77,7 +76,7 @@ struct EditProfileView: View {
             }
 
             // Phone Number ── leading country-code chip variant
-            fieldRow(label: "Phone") {
+            fieldRow(label: "Phone Number") {
                 AppTextField(
                     title: "Enter Your Phone Number",
                     text: $phoneNumber,
@@ -114,27 +113,42 @@ struct EditProfileView: View {
     // MARK: - Action Section
 
     private var actionSection: some View {
-        VStack(spacing: AppSpacing.small) {
+        VStack(spacing: AppSpacing.large) {
 
             // Change Password — password-account variant only
             if !isGoogleLinked {
-                MoreRowCell(
-                    icon: "lock",
-                    title: "edit_profile.change_password"
-                ) {
+                Button {
                     // TODO: router.push(.changePassword)
+                } label: {
+                    HStack(spacing: AppSpacing.small) {
+                        Image(systemName: "lock")
+                            .font(.system(size: 18))
+                            .foregroundColor(.appDark)
+                        Text(String(localized: "edit_profile.change_password"))
+                            .appTextStyle(.bodyMedium, color: .appDark)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.appDark)
+                    }
                 }
             }
 
             // Delete Account — always present, destructive
-            MoreRowCell(
-                icon: "trash",
-                title: "edit_profile.delete_account",
-                isDestructive: true
-            ) {
+            Button {
                 // TODO: show confirmation alert
+            } label: {
+                HStack(spacing: AppSpacing.small) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 18))
+                        .foregroundColor(AppColors.primary)
+                    Text(String(localized: "edit_profile.delete_account"))
+                        .appTextStyle(.bodyMedium, color: AppColors.primary)
+                    Spacer()
+                }
             }
         }
+        .padding(.top, AppSpacing.small)
     }
 
     // MARK: - Helpers
@@ -147,7 +161,7 @@ struct EditProfileView: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: AppSpacing.small) {
             Text(label)
-                .appTextStyle(.bodySmall, color: .appSecondary)
+                .appTextStyle(.bodySmall, color: .gray )
             content()
         }
     }

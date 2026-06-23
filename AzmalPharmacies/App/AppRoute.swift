@@ -47,7 +47,7 @@ extension AppRoute {
         case .checkout:
             CheckoutView()
         case .orderDetails(let id):
-            OrderDetailsView(orderID: id)
+            SingleOrderView(orderID: id)
         case .orderTracking(let id):
             OrderTrackingView(orderID: id)
         case .editProfile:
