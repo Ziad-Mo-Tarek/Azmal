@@ -3,6 +3,7 @@ import SwiftUI
 struct MoreView: View {
     @Environment(DependencyContainer.self) private var dependencies
     @Environment(AppRouter.self) private var router
+    @Environment(AppState.self) private var appState
     @State private var showLanguageSheet = false
 
     var body: some View {
@@ -39,7 +40,7 @@ struct MoreView: View {
                         MoreRowCell(iconImage: .aboutUsProfileIcon,         title: "more.aboutUs")            { }
                         MoreRowCell(iconImage: .logoutProfileIcon,
                                     title: "more.logout",
-                                    isDestructive: true)              { }
+                                    isDestructive: true)              { logout() }
                     }
                 }
                 .padding(.horizontal, AppSpacing.large)
@@ -95,12 +96,24 @@ struct MoreView: View {
             }
         }
     }
+
+    // MARK: – Actions
+
+    /// Clears the auth session and returns the user to guest browsing state.
+    /// Replace the `UserDefaults` clear with `tokenProvider.clear()` once
+    /// real token-based auth is in place.
+    private func logout() {
+        dependencies.authSession.update(user: nil)
+        UserDefaults.standard.set(false, forKey: AppStorageKeys.isLoggedIn)
+        appState.selectedTab = .home
+    }
 }
 
 #Preview {
     MoreView()
         .environment(DependencyContainer())
         .environment(AppRouter())
+        .environment(AppState())
 }
 
 

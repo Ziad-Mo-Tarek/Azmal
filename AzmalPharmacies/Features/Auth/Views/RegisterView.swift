@@ -8,6 +8,10 @@ struct RegisterView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
 
+    @Environment(DependencyContainer.self) private var dependencies
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: AppSpacing.large) {
@@ -51,16 +55,35 @@ struct RegisterView: View {
                 keyboardType: .phonePad
             )
 
-            PrimaryButton(
-                title: "Sign Up"
-            ) {
+            PrimaryButton(title: "Sign Up") {
+                stubRegister()
             }
             .padding(.top, AppSpacing.large)
         }
     }
-}
 
+    // MARK: – Stub register
+    /// Creates a placeholder user from the form fields and opens a session.
+    /// Replace with the real registration API call when the endpoint is ready.
+    private func stubRegister() {
+        let fullName = [firstName, lastName]
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+
+        let stubUser = User(
+            id: 1,
+            name: fullName.isEmpty ? "New User" : fullName,
+            phone: phone,
+            email: email.isEmpty ? nil : email
+        )
+        dependencies.authSession.update(user: stubUser)
+        UserDefaults.standard.set(true, forKey: AppStorageKeys.isLoggedIn)
+        appState.showAuthSheet = false
+    }
+}
 
 #Preview {
     RegisterView()
+        .environment(DependencyContainer())
+        .environment(AppState())
 }
